@@ -1,4 +1,3 @@
-import config from "config";
 import { Schema, model } from "mongoose";
 
 export interface DestinationI extends Document {

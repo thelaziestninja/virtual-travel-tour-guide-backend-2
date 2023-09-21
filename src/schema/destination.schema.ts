@@ -1,4 +1,5 @@
 import { object, string, TypeOf } from "zod";
+
 export const createDestinationSchema = object({
   body: object({
     name: string({
@@ -17,4 +18,5 @@ export const createDestinationSchema = object({
   }),
 });
 
-export type createDestinationInput = TypeOf<typeof createDestinationSchema>
+
+export type createDestinationInput = TypeOf<typeof createDestinationSchema>;

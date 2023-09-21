@@ -1,12 +1,19 @@
 import { Express, Request, Response } from "express";
-import { createDestinationHandler } from "./controller/destination.controller";
-import validateResource from './middleware/validateResourse'
+import validateResource from "./middleware/validateResource";
 import { createDestinationSchema } from "./schema/destination.schema";
+import {
+  createDestinationHandler,
+  getDestinationsHandler,
+} from "./controller/destination.controller";
 
 function routes(app: Express) {
-  app.get("/destination", (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.get("/destination", getDestinationsHandler);
 
-  app.post("/destination", validateResource(createDestinationSchema), createDestinationHandler)
+  app.post(
+    "/destination",
+    validateResource(createDestinationSchema),
+    createDestinationHandler
+  );
 }
+
+export default routes;

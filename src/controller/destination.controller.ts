@@ -2,39 +2,32 @@ import { Request, Response } from "express";
 import logger from "../utils/logger";
 import { createDestination } from "../service/destination.service";
 import { createDestinationInput } from "../schema/destination.schema";
+import { DestinationI, DestinationM } from "../models/destination.model";
 
-export async function createDestinationHandler(req: Request<{}, {}, createDestinationInput['body']>, res: Response) {
+export async function createDestinationHandler(
+  req: Request<{}, {}, createDestinationInput["body"]>,
+  res: Response
+) {
   try {
-    const newDestination = await createDestination(req.body);
-    return newDestination;
+    const newDestination = await createDestination(req.body as DestinationI);
+    return res.status(201).json(newDestination);
   } catch (e: any) {
     logger.error(e);
     return res.status(409).send(e.message);
   }
 }
 
-const createBook = (req: Request, res: Response, next: NextFunction) => {
-    let { author, title } = req.body;
-
-    const book = new Book({
-        _id: new mongoose.Types.ObjectId(),
-        author,
-        title
+export async function getDestinationsHandler(req: Request, res: Response) {
+  try {
+     const destinations = await DestinationM.find().exec()
+     return res.status(200).json({
+      destinations: destinations,
+      count: destinations.length,
     });
+  } catch (e: any) {
+    logger.error(e);
+    return res.status(409).send(e.message);
+  }
+}
 
-    return book
-        .save()
-        .then((result) => {
-            return res.status(201).json({
-                book: result
-            });
-        })
-        .catch((error) => {
-            return res.status(500).json({
-                message: error.message,
-                error
-            });
-        });
-};
-
-export default { createDestination }  
+export default { createDestination, getDestinationsHandler };
