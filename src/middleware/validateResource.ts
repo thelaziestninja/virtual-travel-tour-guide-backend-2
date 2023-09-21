@@ -7,11 +7,11 @@ const validate =
   (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse({
-        body: req.body
+        body: req.body,
       });
-      console.log("Validate before");
+      // console.log("Validate before");
       next();
-      console.log("Validate after and passed control to the next middleware");
+      // console.log("Validate after and passed control to the next middleware");
     } catch (e: any) {
       return res.status(400).send(e.errors);
     }
