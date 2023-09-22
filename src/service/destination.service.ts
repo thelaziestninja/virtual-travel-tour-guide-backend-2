@@ -3,7 +3,8 @@
 //the actual business logic to the corresponding service function.
 //In your service layer, you can encapsulate operations related to your data mode.
 
-import { DestinationI, DestinationM } from "../models/destination.model";
+import { DestinationM } from "../models/destination.model";
+import { DestinationI } from "../types/destination";
 
 export async function createDestination(input: DestinationI) {
   try {

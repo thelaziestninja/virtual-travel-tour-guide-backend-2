@@ -67,7 +67,7 @@ export async function updateDestinationHandler(
   res: Response
 ) {
   const { id } = req.params;
-  // const { name, description, image_url, country, best_time_to_visit } = req.body;
+  // const { name, description, image_url, country, best_time_to_visit } = req.body; -> not needed after I added updateDestination
 
   try {
     const destination = await updateDestination(id, req.body as DestinationI); //from destination.service
