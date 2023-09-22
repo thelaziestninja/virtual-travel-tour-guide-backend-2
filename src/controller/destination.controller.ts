@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import logger from "../utils/logger";
-import { createDestination } from "../service/destination.service";
+import { createDestination, getDestinations } from "../service/destination.service";
 import { createDestinationInput, updateDestinationInput } from "../schema/destination.schema";
 import { DestinationI, DestinationM } from "../models/destination.model";
 
@@ -19,7 +19,7 @@ export async function createDestinationHandler(
 
 export async function getDestinationsHandler(req: Request, res: Response) {
   try {
-    const destinations = await DestinationM.find().exec();
+    const destinations = await getDestinations(); // from destination.service
     if (!destinations || destinations.length === 0) {
       return res.status(404).send({ error: "No destinations found!" });
     }
