@@ -1,7 +1,16 @@
 import { Request, Response } from "express";
 import logger from "../utils/logger";
-import { createDestination, getDestinations } from "../service/destination.service";
-import { createDestinationInput, updateDestinationInput } from "../schema/destination.schema";
+import {
+  createDestination,
+  deleteDestination,
+  getDestinationById,
+  getDestinations,
+  updateDestination,
+} from "../service/destination.service";
+import {
+  createDestinationInput,
+  updateDestinationInput,
+} from "../schema/destination.schema";
 import { DestinationI, DestinationM } from "../models/destination.model";
 
 export async function createDestinationHandler(
@@ -9,7 +18,7 @@ export async function createDestinationHandler(
   res: Response
 ) {
   try {
-    const newDestination = await createDestination(req.body as DestinationI);
+    const newDestination = await createDestination(req.body as DestinationI); // from destination.service
     return res.status(201).json(newDestination);
   } catch (e: any) {
     logger.error(e);
@@ -40,7 +49,7 @@ export async function getDestinationByIdHandler(
 ) {
   try {
     const destinationId = req.params.id;
-    const destination = await DestinationM.findById(destinationId);
+    const destination = await getDestinationById(destinationId); // from destination.service
 
     if (!destination) {
       return res.status(404).send({ error: "Destination not existing!" });
@@ -58,20 +67,10 @@ export async function updateDestinationHandler(
   res: Response
 ) {
   const { id } = req.params;
-  const { name, description, image_url, country, best_time_to_visit } = req.body;
+  // const { name, description, image_url, country, best_time_to_visit } = req.body;
 
   try {
-    const destination = await DestinationM.findByIdAndUpdate(
-      id,
-      {
-        name,
-        description,
-        image_url,
-        country,
-        best_time_to_visit,
-      },
-      { new: true } // will contain the updated document with the new details after the update is complete.
-    );
+    const destination = await updateDestination(id, req.body as DestinationI); //from destination.service
 
     if (!destination) {
       return res.status(404).json({ error: "Destination not found!" });
@@ -90,7 +89,7 @@ export async function deleteDestinationHandler(
 ) {
   try {
     const destinationId = req.params.id;
-    const destination = await DestinationM.findByIdAndDelete(destinationId);
+    const destination = await deleteDestination(destinationId); //from destination.service
 
     if (!destination) {
       return res.status(404).json({ error: "Destination not existing!" });
@@ -98,7 +97,9 @@ export async function deleteDestinationHandler(
 
     return res
       .status(200)
-      .json({ message: `${destination.name} with ID: ${destination._id} has been deleted.` });
+      .json({
+        message: `${destination.name} with ID: ${destination._id} has been deleted.`,
+      });
   } catch (e: any) {
     logger.error("Error deleting destination by ID:", e);
     return res.status(500).send(e);
@@ -110,5 +111,5 @@ export default {
   getDestinationsHandler,
   getDestinationByIdHandler,
   deleteDestinationHandler,
-  updateDestinationHandler
+  updateDestinationHandler,
 };
