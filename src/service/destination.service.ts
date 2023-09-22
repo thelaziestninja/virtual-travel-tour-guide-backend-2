@@ -7,3 +7,6 @@ export async function createDestination (input: DestinationI) {
         throw new Error(e)
     }
 }
+
+
+// I don't need to add deleteDestination, getDestinations, getDestinationById services

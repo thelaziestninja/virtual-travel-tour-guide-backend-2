@@ -5,6 +5,7 @@ import {
   createDestinationHandler,
   getDestinationsHandler,
   getDestinationByIdHandler,
+  deleteDestinationHandler,
 } from "./controller/destination.controller";
 
 function routes(app: Express) {
@@ -17,6 +18,8 @@ function routes(app: Express) {
     validateResource(createDestinationSchema),
     createDestinationHandler
   );
+
+  app.delete("/destination/:id", deleteDestinationHandler);
 }
 
 export default routes;
