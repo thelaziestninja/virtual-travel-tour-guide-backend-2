@@ -18,5 +18,16 @@ export const createDestinationSchema = object({
   }),
 });
 
-
 export type createDestinationInput = TypeOf<typeof createDestinationSchema>;
+
+export const updateDestinationSchema = object({
+  body: object({
+    name: string().optional(),
+    description: string().optional(),
+    image_url: string().optional(),
+    country: string().optional(),
+    best_time_to_visit: string().optional(),
+  }),
+});
+
+export type updateDestinationInput = TypeOf<typeof updateDestinationSchema>;

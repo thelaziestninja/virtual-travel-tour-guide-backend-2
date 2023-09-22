@@ -1,11 +1,15 @@
 import { Express, Request, Response } from "express";
 import validateResource from "./middleware/validateResource";
-import { createDestinationSchema } from "./schema/destination.schema";
+import {
+  createDestinationSchema,
+  updateDestinationSchema,
+} from "./schema/destination.schema";
 import {
   createDestinationHandler,
   getDestinationsHandler,
   getDestinationByIdHandler,
   deleteDestinationHandler,
+  updateDestinationHandler,
 } from "./controller/destination.controller";
 
 function routes(app: Express) {
@@ -20,6 +24,12 @@ function routes(app: Express) {
   );
 
   app.delete("/destination/:id", deleteDestinationHandler);
+
+  app.put(
+    "/destination/:id",
+    validateResource(updateDestinationSchema),
+    updateDestinationHandler
+  );
 }
 
 export default routes;

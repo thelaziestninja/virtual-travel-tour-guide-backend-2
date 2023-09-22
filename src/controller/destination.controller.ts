@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import logger from "../utils/logger";
 import { createDestination } from "../service/destination.service";
-import { createDestinationInput } from "../schema/destination.schema";
+import { createDestinationInput, updateDestinationInput } from "../schema/destination.schema";
 import { DestinationI, DestinationM } from "../models/destination.model";
 
 export async function createDestinationHandler(
@@ -53,6 +53,37 @@ export async function getDestinationByIdHandler(
   }
 }
 
+export async function updateDestinationHandler(
+  req: Request<{ id: string }, {}, updateDestinationInput["body"]>,
+  res: Response
+) {
+  const { id } = req.params;
+  const { name, description, image_url, country, best_time_to_visit } = req.body;
+
+  try {
+    const destination = await DestinationM.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        image_url,
+        country,
+        best_time_to_visit,
+      },
+      { new: true } // will contain the updated document with the new details after the update is complete.
+    );
+
+    if (!destination) {
+      return res.status(404).json({ error: "Destination not found!" });
+    }
+
+    res.status(200).json(destination);
+  } catch (e: any) {
+    logger.error("Error updating destination:", e);
+    res.status(500).json(e);
+  }
+}
+
 export async function deleteDestinationHandler(
   req: Request<{ id: string }>,
   res: Response
@@ -78,5 +109,6 @@ export default {
   createDestination,
   getDestinationsHandler,
   getDestinationByIdHandler,
-  deleteDestinationHandler
+  deleteDestinationHandler,
+  updateDestinationHandler
 };
