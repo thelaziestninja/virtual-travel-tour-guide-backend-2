@@ -1,7 +1,9 @@
-// essential part of your application's architecture. It separates the business logic of your application from the controllers and routes,
-//promoting modularity and maintainability. Each of your route handlers (createDestinationHandler, getDestinationsHandler, etc.) should delegate
-//the actual business logic to the corresponding service function.
-//In your service layer, you can encapsulate operations related to your data mode.
+/*
+  Services separate the business logic of the application from the controllers and routes,
+  promoting modularity and maintainability. Each of the route handlers (createDestinationHandler, getDestinationsHandler, etc.) 
+  should delegate the actual business logic to the corresponding service function.
+  In this service layer, we can encapsulate operations related to the data mode. 
+*/
 
 import { DestinationM } from "../models/destination.model";
 import { DestinationI } from "../types/destination";
