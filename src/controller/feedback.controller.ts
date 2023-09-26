@@ -1,13 +1,13 @@
 import logger from "../utils/logger";
 import { Request, Response } from "express";
 import { FeedbackI } from "../types/feedback";
+import { createFeedbackInput } from "../schema/feedback.schema";
+import { getDestinationById } from "../service/destination.service";
 import {
   createFeedback,
   deleteFeedback,
   getFeedbacks,
 } from "../service/feedback.service";
-import { createFeedbackInput } from "../schema/feedback.schema";
-import { getDestinationById } from "../service/destination.service";
 
 export async function createFeedbackHandler(
   req: Request<{ destinationId: string & createFeedbackInput["body"] }>,

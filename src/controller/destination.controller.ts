@@ -2,16 +2,16 @@ import logger from "../utils/logger";
 import { Request, Response } from "express";
 import { DestinationI } from "../types/destination";
 import {
+  createDestinationInput,
+  updateDestinationInput,
+} from "../schema/destination.schema";
+import {
   createDestination,
   deleteDestination,
   getDestinationById,
   getDestinations,
   updateDestination,
 } from "../service/destination.service";
-import {
-  createDestinationInput,
-  updateDestinationInput,
-} from "../schema/destination.schema";
 
 export async function createDestinationHandler(
   req: Request<{}, {}, createDestinationInput["body"]>,
@@ -103,11 +103,3 @@ export async function deleteDestinationHandler(
     res.status(500).send(e);
   }
 }
-
-export default {
-  createDestination,
-  getDestinationsHandler,
-  getDestinationByIdHandler,
-  deleteDestinationHandler,
-  updateDestinationHandler,
-};
