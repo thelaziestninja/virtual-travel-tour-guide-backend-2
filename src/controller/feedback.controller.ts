@@ -1,11 +1,11 @@
 import logger from "../utils/logger";
 import { Request, Response } from "express";
-import { createFeedbackInput } from "../schema/feedback.schema";
 import { FeedbackI } from "../types/feedback";
-import { DestinationM } from "../models/destination.model";
 import { FeedbackM } from "../models/feedback.model";
+import { getFeedbacks } from "../service/feedback.service";
+import { DestinationM } from "../models/destination.model";
+import { createFeedbackInput } from "../schema/feedback.schema";
 import { getDestinationById } from "../service/destination.service";
-
 export async function createFeedbackHandler(
   req: Request<{ destinationId: string & createFeedbackInput["body"] }>,
   res: Response<FeedbackI | { error: string }>
@@ -54,7 +54,7 @@ export async function getFeedbackHandler(
     if (!destination) {
       return res.status(404).send({ error: "Destination not existing!" });
     }
-    const feedback = await FeedbackM.find({ destination_id: destinationId });
+    const feedback = await getFeedbacks(destinationId);
     if (!feedback) {
       return res.status(404).send({ error: "Feedback not existing!" });
     }

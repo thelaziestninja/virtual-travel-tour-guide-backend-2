@@ -1,5 +1,6 @@
 import logger from "../utils/logger";
 import { Request, Response } from "express";
+import { DestinationI } from "../types/destination";
 import {
   createDestination,
   deleteDestination,
@@ -11,7 +12,6 @@ import {
   createDestinationInput,
   updateDestinationInput,
 } from "../schema/destination.schema";
-import { DestinationI } from "../types/destination";
 
 export async function createDestinationHandler(
   req: Request<{}, {}, createDestinationInput["body"]>,
@@ -19,27 +19,27 @@ export async function createDestinationHandler(
 ) {
   try {
     const newDestination = await createDestination(req.body as DestinationI); // from destination.service
-    return res.status(201).json(newDestination);
+    res.status(201).json(newDestination);
   } catch (e: any) {
     logger.error(e);
     res.status(409).send(e);
   }
 }
 
-export async function getDestinationsHandler(req: Request, res: Response) {
+export async function getDestinationsHandler(
+  req: Request,
+  res: Response<DestinationI[] | { error: string }>
+) {
   try {
     const destinations = await getDestinations(); // from destination.service
     if (!destinations || destinations.length === 0) {
       return res.status(404).send({ error: "No destinations found!" });
     }
 
-    res.status(200).json({
-      destinations: destinations,
-      count: destinations.length,
-    });
+    res.status(200).json(destinations);
   } catch (e: any) {
     logger.error(e);
-    return res.status(409).send(e.message);
+    res.status(409).send(e.message);
   }
 }
 
@@ -55,10 +55,10 @@ export async function getDestinationByIdHandler(
       return res.status(404).send({ error: "Destination not existing!" });
     }
 
-    return res.status(200).json(destination);
+    res.status(200).json(destination);
   } catch (e: any) {
     logger.error(e);
-    return res.status(409).send(e.message);
+    res.status(409).send(e.message);
   }
 }
 
@@ -95,12 +95,12 @@ export async function deleteDestinationHandler(
       return res.status(404).json({ error: "Destination not existing!" });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       message: `${destination.name} with ID: ${destination._id} has been deleted.`,
     });
   } catch (e: any) {
     logger.error("Error deleting destination by ID:", e);
-    return res.status(500).send(e);
+    res.status(500).send(e);
   }
 }
 
