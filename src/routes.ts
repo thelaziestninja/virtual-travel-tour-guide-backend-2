@@ -1,4 +1,4 @@
-import { Express, Request, Response } from "express";
+import { Express } from "express";
 import validateResource from "./middleware/validateResource";
 import {
   createDestinationSchema,
@@ -12,7 +12,7 @@ import {
   updateDestinationHandler,
 } from "./controller/destination.controller";
 import { createFeedbackSchema } from "./schema/feedback.schema";
-import { createFeedbackHandler, getFeedbackHandler } from "./controller/feedback.controller";
+import { createFeedbackHandler, deleteFeedbackHandler, getFeedbackHandler } from "./controller/feedback.controller";
 
 function routes(app: Express) {
   app.get("/destination", getDestinationsHandler);
@@ -40,6 +40,8 @@ function routes(app: Express) {
   );
 
   app.get("/feedback/:destinationId",getFeedbackHandler)
+
+  app.delete("/feedback/:id", deleteFeedbackHandler)
 }
 
 export default routes;

@@ -1,11 +1,14 @@
 import logger from "../utils/logger";
 import { Request, Response } from "express";
 import { FeedbackI } from "../types/feedback";
-import { FeedbackM } from "../models/feedback.model";
-import { getFeedbacks } from "../service/feedback.service";
-import { DestinationM } from "../models/destination.model";
+import {
+  createFeedback,
+  deleteFeedback,
+  getFeedbacks,
+} from "../service/feedback.service";
 import { createFeedbackInput } from "../schema/feedback.schema";
 import { getDestinationById } from "../service/destination.service";
+
 export async function createFeedbackHandler(
   req: Request<{ destinationId: string & createFeedbackInput["body"] }>,
   res: Response<FeedbackI | { error: string }>
@@ -14,17 +17,17 @@ export async function createFeedbackHandler(
   const { feedback_text, left_by } = req.body;
 
   try {
-    const destination = await DestinationM.findById(destinationId);
+    const destination = await getDestinationById(destinationId);
 
     if (!destination) {
       return res.status(404).send({ error: "Destination not existing!" });
     }
 
-    const feedback = new FeedbackM({
-      destination_id: destinationId,
+    const feedback = await createFeedback(
+      destinationId,
       feedback_text,
-      left_by,
-    });
+      left_by
+    );
 
     await feedback.save();
 
@@ -60,6 +63,27 @@ export async function getFeedbackHandler(
     }
 
     res.status(200).send(feedback);
+  } catch (e: any) {
+    logger.error(e);
+    res.status(500).send(e.message);
+  }
+}
+
+export async function deleteFeedbackHandler(
+  req: Request<{ id: string }>,
+  res: Response<FeedbackI | { error: string } | { message: string }>
+) {
+  try {
+    const { id } = req.params;
+
+    const feedback = await deleteFeedback(id);
+    if (!feedback) {
+      return res.status(404).send({ error: "Feedback not existing!" });
+    }
+
+    res
+      .status(200)
+      .json({ message: `Feedback with ID: ${feedback._id} has been deleted.` });
   } catch (e: any) {
     logger.error(e);
     res.status(500).send(e.message);
