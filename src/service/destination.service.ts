@@ -6,7 +6,7 @@
 */
 
 import { DestinationM } from "../models/destination.model";
-import { DestinationI } from "../types/destination";
+import { DestinationI, destinationUpdates } from "../types/destination";
 
 export async function createDestination(
   input: DestinationI
@@ -36,9 +36,18 @@ export async function getDestinationById(
   }
 }
 
+// export interface Credentials {
+//   name: string;
+//   email: string;
+//   password: string;
+// }
+
+// type LoginUser = Pick<Credentials, 'email' | 'password'>;
+// type ResetPassword = Pick<Credentials, 'email'>;
+
 export async function updateDestination(
   id: string,
-  updates: Partial<DestinationI>
+  updates: destinationUpdates // I used Picker
 ): Promise<DestinationI | null> {
   try {
     const updatedDestination = await DestinationM.findByIdAndUpdate(

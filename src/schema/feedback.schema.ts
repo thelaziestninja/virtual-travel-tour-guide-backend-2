@@ -1,4 +1,4 @@
-import { object, string, TypeOf, date } from 'zod';
+import { object, string, TypeOf } from 'zod';
 
 export const createFeedbackSchema = object({
   body: object({
