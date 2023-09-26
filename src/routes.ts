@@ -11,6 +11,8 @@ import {
   deleteDestinationHandler,
   updateDestinationHandler,
 } from "./controller/destination.controller";
+import { createFeedbackSchema } from "./schema/feedback.schema";
+import { createFeedbackHandler, getFeedbackHandler } from "./controller/feedback.controller";
 
 function routes(app: Express) {
   app.get("/destination", getDestinationsHandler);
@@ -30,6 +32,14 @@ function routes(app: Express) {
     validateResource(updateDestinationSchema),
     updateDestinationHandler
   );
+
+  app.post(
+    "/feedback/:destinationId",
+    validateResource(createFeedbackSchema),
+    createFeedbackHandler
+  );
+
+  app.get("/feedback/:destinationId",getFeedbackHandler)
 }
 
 export default routes;

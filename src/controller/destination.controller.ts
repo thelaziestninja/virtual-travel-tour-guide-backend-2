@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
 import logger from "../utils/logger";
+import { Request, Response } from "express";
 import {
   createDestination,
   deleteDestination,
@@ -11,7 +11,7 @@ import {
   createDestinationInput,
   updateDestinationInput,
 } from "../schema/destination.schema";
-import { DestinationI, DestinationM } from "../models/destination.model";
+import { DestinationI } from "../types/destination";
 
 export async function createDestinationHandler(
   req: Request<{}, {}, createDestinationInput["body"]>,
@@ -22,7 +22,7 @@ export async function createDestinationHandler(
     return res.status(201).json(newDestination);
   } catch (e: any) {
     logger.error(e);
-    return res.status(409).send(e.message);
+    res.status(409).send(e);
   }
 }
 
@@ -33,7 +33,7 @@ export async function getDestinationsHandler(req: Request, res: Response) {
       return res.status(404).send({ error: "No destinations found!" });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       destinations: destinations,
       count: destinations.length,
     });
@@ -95,11 +95,9 @@ export async function deleteDestinationHandler(
       return res.status(404).json({ error: "Destination not existing!" });
     }
 
-    return res
-      .status(200)
-      .json({
-        message: `${destination.name} with ID: ${destination._id} has been deleted.`,
-      });
+    return res.status(200).json({
+      message: `${destination.name} with ID: ${destination._id} has been deleted.`,
+    });
   } catch (e: any) {
     logger.error("Error deleting destination by ID:", e);
     return res.status(500).send(e);
