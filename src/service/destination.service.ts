@@ -8,7 +8,9 @@
 import { DestinationM } from "../models/destination.model";
 import { DestinationI } from "../types/destination";
 
-export async function createDestination(input: DestinationI) {
+export async function createDestination(
+  input: DestinationI
+): Promise<DestinationI> {
   try {
     return await DestinationM.create(input);
   } catch (e: any) {
@@ -16,7 +18,7 @@ export async function createDestination(input: DestinationI) {
   }
 }
 
-export async function getDestinations() {
+export async function getDestinations(): Promise<DestinationI[]> {
   try {
     return await DestinationM.find().exec();
   } catch (e: any) {
@@ -24,7 +26,9 @@ export async function getDestinations() {
   }
 }
 
-export async function getDestinationById(id: string) {
+export async function getDestinationById(
+  id: string
+): Promise<DestinationI | null> {
   try {
     return await DestinationM.findById(id);
   } catch (e: any) {
@@ -35,7 +39,7 @@ export async function getDestinationById(id: string) {
 export async function updateDestination(
   id: string,
   updates: Partial<DestinationI>
-) {
+): Promise<DestinationI | null> {
   try {
     const updatedDestination = await DestinationM.findByIdAndUpdate(
       id,
@@ -49,7 +53,9 @@ export async function updateDestination(
   }
 }
 
-export async function deleteDestination(id: string) {
+export async function deleteDestination(
+  id: string
+): Promise<DestinationI | null> {
   try {
     return await DestinationM.findByIdAndDelete(id);
   } catch (e: any) {
