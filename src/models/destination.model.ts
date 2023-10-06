@@ -12,7 +12,7 @@ const destinationSchema = new Schema<DestinationI>({
     required: true,
   },
   image_url: {
-    type: String,
+    type: [String],
     //   required: true,
   },
   country: {

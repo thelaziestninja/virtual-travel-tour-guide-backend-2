@@ -8,6 +8,7 @@ import {
 import {
   createDestination,
   deleteDestination,
+  findDestinationByName,
   getDestinationById,
   getDestinations,
   updateDestination,
@@ -18,8 +19,14 @@ export async function createDestinationHandler(
   res: Response
 ) {
   try {
-    const newDestination = await createDestination(req.body as DestinationI); // from destination.service
-    res.status(201).json(newDestination);
+    const { name } = req.body;
+    const existingDestination = await findDestinationByName(name);
+    if (existingDestination) {
+      res.status(400).send('A destination with that name already exists');
+    } else {
+      const newDestination = await createDestination(req.body as DestinationI); // from destination.service
+      res.status(201).json(newDestination);
+    }
   } catch (e: any) {
     logger.error(e);
     res.status(409).send(e);

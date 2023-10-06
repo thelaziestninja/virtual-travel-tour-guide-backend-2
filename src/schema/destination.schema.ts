@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from "zod";
+import { object, string, array, TypeOf } from "zod";
 
 export const createDestinationSchema = object({
   body: object({
@@ -8,7 +8,7 @@ export const createDestinationSchema = object({
     description: string({
       required_error: "Description is required.",
     }),
-    image_url: string(),
+    image_url: array(string()),
     country: string({
       required_error: "Country is required.",
     }),
@@ -24,7 +24,7 @@ export const updateDestinationSchema = object({
   body: object({
     name: string().optional(),
     description: string().optional(),
-    image_url: string().optional(),
+    image_url: array(string()).optional(),
     country: string().optional(),
     best_time_to_visit: string().optional(),
   }),

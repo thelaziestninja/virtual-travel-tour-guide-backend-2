@@ -6,10 +6,18 @@
 */
 
 import { DestinationM } from "../models/destination.model";
-import { DestinationI, destinationUpdates } from "../types/destination";
+import { DestinationI, destinationUpdates, DestinationCreation } from "../types/destination";
+
+export async function findDestinationByName(name: string): Promise<DestinationI | null> {
+  try {
+    return await DestinationM.findOne({ name });
+  } catch (e: any) {
+    throw new Error(e);
+  }
+}
 
 export async function createDestination(
-  input: DestinationI
+  input: DestinationCreation
 ): Promise<DestinationI> {
   try {
     return await DestinationM.create(input);
